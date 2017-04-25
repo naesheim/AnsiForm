@@ -1,0 +1,26 @@
+- hosts: dev
+  tasks:
+  - name: upgrade all packages
+    become: true
+    become_user: root
+    yum:
+      name: '*'
+      state: latest
+
+  - name: install nginx
+    become: true
+    become_user: root
+    yum:
+      name: nginx
+      state: latest
+
+  - name: run nginx
+    action: ping
+    notify: start nginx
+
+  - name: start nginx
+    service:
+      name: nginx
+      state: started
+    become: true
+    become_user: root
