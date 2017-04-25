@@ -2,19 +2,18 @@
 provider "aws" {
   access_key = "${var.access_key}"
   secret_key = "${var.secret_key}"
-  region     = "eu-central-1"
+  region     = "${var.region}"
 }
 
 # this spins up a new instance in cloud of type 'instance type'
 resource "aws_instance" "linux_base" {
-  ami           = "ami-211ada4e"
-  key_name = "terraform-key-pair-eu-central-1"
-  instance_type = "t2.small"
+  ami           = "${var.ami_id}"
+  key_name = "${var.key_name}"
+  instance_type = "${var.instance_type}"
   subnet_id = "${module.vpc.public_subnet_id}"
   #specify which security rules are active
   vpc_security_group_ids = ["${aws_security_group.agent.id}"]
   associate_public_ip_address = true
-
   tags {
       Name = "InfrasAsCode"
   }
