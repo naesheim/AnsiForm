@@ -1,0 +1,13 @@
+- hosts: dev
+  tasks:
+  - name: run docker-compose
+    become: true
+    become_user: root
+    command: docker-compose up -d
+    args:
+        chdir: /home/ec2-user/project
+
+  - name: add datasource
+    command: ./init_datasource.sh
+    args:
+        chdir: /home/ec2-user/project/Grafana/config

@@ -58,6 +58,34 @@ resource "aws_elb" "base" {
   }
 
   listener {
+      instance_port = 8081
+      instance_protocol = "http"
+      lb_port = 8081
+      lb_protocol = "http"
+  }
+
+  listener {
+      instance_port = 8082
+      instance_protocol = "http"
+      lb_port = 8082
+      lb_protocol = "http"
+  }
+
+  listener {
+      instance_port = 9090
+      instance_protocol = "http"
+      lb_port = 9090
+      lb_protocol = "http"
+  }
+
+  listener {
+      instance_port = 3000
+      instance_protocol = "http"
+      lb_port = 3000
+      lb_protocol = "http"
+  }
+
+  listener {
      instance_port = 80
      instance_protocol = "http"
      lb_port = 80
@@ -78,9 +106,10 @@ resource "aws_security_group" "elb" {
         cidr_blocks = ["0.0.0.0/0"]
     }
 
+# allow from all ports
     ingress {
-        from_port = 80
-        to_port = 80
+        from_port = 0
+        to_port = 10000
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
@@ -99,9 +128,9 @@ resource "aws_security_group" "agent" {
   }
 
   ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
     cidr_blocks = ["${module.vpc.cidr}"]
   }
 

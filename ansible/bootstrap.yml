@@ -7,20 +7,44 @@
       name: '*'
       state: latest
 
-  - name: install nginx
+  - name: install git
     become: true
     become_user: root
     yum:
-      name: nginx
-      state: latest
+        name: git
+        state: latest
 
-  - name: run nginx
-    action: ping
-    notify: start nginx
-
-  - name: start nginx
-    service:
-      name: nginx
-      state: started
+  - name: install docker
     become: true
     become_user: root
+    yum:
+      name: docker
+      state: latest
+
+  - name: run docker
+    action: ping
+    notify: start docker
+
+  - name: start docker
+    service:
+      name: docker
+      state: restarted
+    become: true
+    become_user: root
+
+  - name: install docker-compose
+    become: true
+    become_user: root
+    pip:
+      name: docker-compose
+
+  - name: hackety-hack
+    become: true
+    become_user: root
+    command: mv /usr/local/bin/docker-compose /usr/bin/
+
+  - git:
+      clone: yes
+      dest: ~/project
+      repo: https://github.com/naesheim/ARTIJenkVBA.git
+      update: yes
